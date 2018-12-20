@@ -77,12 +77,13 @@ def coeff(pred_set, real_val):
     """Compute coefficients that minimize a set of prediction given the real predictions."""
     l = np.shape(pred_set)[1]
     x0 = np.ones([1, l])*1/l
-    opt = optimize.minimize(calculate_poud_mse,x0, args=(real_val, pred_set.T), method='SLSQP')
+    opt = optimize.minimize(calculate_weighted_mse, x0, args=(real_val, pred_set.T), method='SLSQP')
     return opt['x']
 
 
-def calculate_poud_mse(poud,real_label,prediction):
-    prediction= poud @ prediction
+def calculate_weighted_mse(weights, real_label, prediction):
+    """Calculate the MSE using weights of the predictions."""
+    prediction = weights@prediction
     t = real_label - prediction
     return 1.0 * t.dot(t.T)
 
