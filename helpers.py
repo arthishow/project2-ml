@@ -49,8 +49,8 @@ def item_mean_pred(trainset,testset,predset):
     g = trainset.groupby('Item')
     item_mean  = g.mean()
     dict_mean = item_mean.to_dict()['Prediction']
-    itemmean_test = np.array([user_item_func(dict_mean,p[0],mean) for p in testset])
-    itemmean_pred = np.array([user_item_func(dict_mean,p[0],mean) for p in predset])
+    itemmean_test = np.array([user_item_func(dict_mean,p[1],mean) for p in testset])
+    itemmean_pred = np.array([user_item_func(dict_mean,p[1],mean) for p in predset])
     itemmean_test = np.reshape(itemmean_test,(len(itemmean_test),1))
     itemmean_pred = np.reshape(itemmean_pred,(len(itemmean_pred),1))
     return itemmean_test,itemmean_pred
@@ -127,4 +127,8 @@ def calculate_poud_rmse_round(poud,real_label,prediction):
 def calculate_rmse(real_label, prediction):
     """calculate MSE."""
     mse=calculate_mse(real_label, prediction)
+    return np.sqrt(mse/len(real_label))
+def calculate_rmse_round(real_label, prediction):
+    """calculate MSE."""
+    mse=calculate_mse_round(real_label, prediction)
     return np.sqrt(mse/len(real_label))
